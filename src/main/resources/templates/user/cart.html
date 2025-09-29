@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{base::layout(~{::section})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Cart Page</title>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+<section>
+    <div class="container-fluid mt-5 p-5">
+        <div class="card card-sh">
+            <div class="card-header text-center">
+                <p class="fs-4">Cart Page</p>
+
+                <!-- Success Message -->
+                <th:block th:if="${session.succMsg}">
+                    <p class="text-success fw-bold">[[${session.succMsg}]]</p>
+                    <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+                </th:block>
+
+                <!-- Error Message -->
+                <th:block th:if="${session.errorMsg}">
+                    <p class="text-danger fw-bold">[[${session.errorMsg}]]</p>
+                    <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+                </th:block>
+            </div>
+
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Sl No</th>
+                            <th scope="col">Image</th>
+                            <th scope="col">Product Name</th>
+                            <th scope="col">Price</th>
+                            <th scope="col" class="text-center">Quantity</th>
+                            <th scope="col">Total Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Cart Items -->
+                        <tr th:each="cart,c:${carts}">
+                            <th scope="row">[[${c.count}]]</th>
+                            <td>
+                                <img th:src="@{'/img/product_img/'+${cart.product.image}}"
+                                     width="70" height="70" alt="Product">
+                            </td>
+                            <td>[[${cart.product.title}]]</td>
+                            <!-- ราคาต่อชิ้น -->
+                            <td>
+                                [[${#numbers.formatDecimal(cart.product.discountPrice, 1, 'COMMA', 2, 'POINT')}]] บาท
+                            </td>
+                            <!-- จำนวนสินค้า -->
+                            <td class="text-center">
+                                <a th:href="@{'/user/cartQuantityUpdate?sy=de&cid='+${cart.id}}">
+                                    <i class="fa-solid fa-minus"></i>
+                                </a>
+                                [ [[${cart.quantity}]] ]
+                                <a th:href="@{'/user/cartQuantityUpdate?sy=in&cid='+${cart.id}}">
+                                    <i class="fa-solid fa-plus"></i>
+                                </a>
+                            </td>
+                            <!-- ราคารวมต่อชิ้น -->
+                            <td>
+                                [[${#numbers.formatDecimal(cart.totalPrice, 1, 'COMMA', 2, 'POINT')}]] บาท
+                            </td>
+                        </tr>
+
+                        <!-- ราคารวมทั้งหมด -->
+                        <tr>
+                            <td colspan="4"></td>
+                            <td class="fw-bold">Total Price</td>
+                            <td class="fw-bold">
+                                [[${#numbers.formatDecimal(totalOrderPrice, 1, 'COMMA', 2, 'POINT')}]] บาท
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Proceed to Payment -->
+                <div class="text-center">
+                    <a href="/user/orders" class="btn btn-warning">Proceed Payment</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>
