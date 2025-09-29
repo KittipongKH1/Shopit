@@ -1,122 +1,13 @@
-/*
- * File: style-skeleton.css
- * Gaming Gear Skeleton Layout
- */
+@charset "ISO-8859-1";
 
-/* ==================
- * Global
- * ================== */
- body {
-    font-family: 'Roboto', sans-serif;
-    background-color: #0a0a1e;
-    color: #e0e0e0;
-}
-
-a {
-    text-decoration: none;
-    color: inherit;
-}
-
-/* ==================
- * Search Bar
- * ================== */
-.input-group input,
-.input-group button {
-    border-radius: 5px;
-}
-
-/* ==================
- * Sidebar / Category
- * ================== */
-.list-group-item {
-    background-color: #1a1a2e;
-    color: #e0e0e0;
-    border: 1px solid #4ddbff;
-    margin-bottom: 5px;
-    transition: all 0.3s ease;
-    text-align: center;
-}
-
-.list-group-item.active,
-.list-group-item:hover {
-    background-color: #4ddbff;
-    color: #0a0a1e;
-}
-
-/* ==================
- * Product Card Skeleton
- * ================== */
 .card-sh {
-    background: #1a1a2e;
-    border: 1px solid rgba(77, 219, 255, 0.3);
-    border-radius: 15px;
-    padding: 1rem;
-    text-align: center;
-    margin-bottom: 20px;
+	box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.3);
 }
 
-.card-sh:hover {
-    transform: none; /* ปิด hover effect ชั่วคราว */
-    box-shadow: none;
+.cat-div {
+	box-shadow: 0 0 10px rgba(0, 0, 0, .1);
 }
 
-/* Product Image Placeholder */
-.card-sh img {
-    width: 100%;
-    height: 150px;
-    background-color: #333; /* สีแทนรูป */
-    border-radius: 10px;
-    display: block;
-    margin-bottom: 0.5rem;
-}
-
-/* Product Title Placeholder */
-.card-sh p {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #aaa; /* สีเทาเพื่อเป็น placeholder */
-    background-color: #333;
-    height: 20px;
-    width: 80%;
-    margin: 0.5rem auto;
-    border-radius: 4px;
-}
-
-/* Product Price Placeholder */
-.card-sh .price-placeholder {
-    width: 50%;
-    height: 18px;
-    background-color: #444;
-    margin: 0.3rem auto;
-    border-radius: 4px;
-}
-
-/* ==================
- * Pagination
- * ================== */
-.pagination .page-item .page-link {
-    color: #4ddbff;
-    background-color: #1a1a2e;
-    border: 1px solid #4ddbff;
-    margin: 2px;
-}
-
-.pagination .page-item.active .page-link,
-.pagination .page-item:hover .page-link {
-    background-color: #4ddbff;
-    color: #0a0a1e;
-}
-
-/* ==================
- * Buttons
- * ================== */
-.btn-primary {
-    background-color: #4ddbff;
-    border-color: #4ddbff;
-    color: #0a0a1e;
-}
-
-.btn-primary:hover {
-    background-color: #3bb3e0;
-    border-color: #3bb3e0;
+.error {
+	color: red;
 }
