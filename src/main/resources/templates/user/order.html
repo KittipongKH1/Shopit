@@ -3,105 +3,172 @@
       th:replace="~{base::layout(~{::section})}">
 <head>
     <meta charset="UTF-8">
-    <title>Checkout</title>
+    <title>Checkout - Shopit</title>
+    <style>
+        .checkout-section {
+            padding: 3rem 0;
+            background: #f8f9fa;
+            min-height: 80vh;
+        }
+        .checkout-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #667eea;
+        }
+        .form-control {
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        .summary-table {
+            margin: 0;
+        }
+        .summary-table td {
+            padding: 0.75rem;
+            border: none;
+        }
+        .summary-total {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #667eea;
+            border-top: 2px solid #e2e8f0;
+        }
+        .btn-place-order {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        .btn-place-order:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        .payment-option {
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .payment-option:hover {
+            border-color: #667eea;
+            background: #f8f9fa;
+        }
+    </style>
 </head>
 <body>
-<section>
-
-    <div class="container mt-5 p-5">
-        <form id="orders" novalidate>
+<section class="checkout-section">
+    <div class="container">
+        <form id="orders" action="/user/save-order" method="post">
             <div class="row">
-
-                <!-- Billing Address -->
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <p class="text-center fs-4">Billing Address</p>
-                        <hr>
-                        <div class="row g-2">
-                            <div class="col">
-                                <input type="text" name="firstName" placeholder="First Name" class="form-control">
+                <div class="col-lg-7">
+                    <div class="checkout-card">
+                        <h3 class="section-title">
+                            <i class="fas fa-map-marker-alt"></i> Billing Address
+                        </h3>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <input type="text" name="firstName" placeholder="First Name" 
+                                       class="form-control" required>
                             </div>
-                            <div class="col">
-                                <input type="text" name="lastName" placeholder="Last Name" class="form-control">
+                            <div class="col-md-6">
+                                <input type="text" name="lastName" placeholder="Last Name" 
+                                       class="form-control" required>
                             </div>
-                        </div>
-                        <div class="row g-2 mt-2">
-                            <div class="col">
-                                <input type="email" name="email" placeholder="Email" class="form-control">
+                            <div class="col-md-6">
+                                <input type="email" name="email" placeholder="Email" 
+                                       class="form-control" required>
                             </div>
-                            <div class="col">
-                                <input type="text" name="mobileNo" placeholder="Mobile Number" class="form-control">
+                            <div class="col-md-6">
+                                <input type="text" name="mobileNo" placeholder="Mobile Number" 
+                                       class="form-control" required>
                             </div>
-                        </div>
-                        <div class="row g-2 mt-2">
-                            <div class="col">
-                                <input type="text" name="address" placeholder="Address" class="form-control">
+                            <div class="col-md-6">
+                                <input type="text" name="address" placeholder="Address" 
+                                       class="form-control" required>
                             </div>
-                            <div class="col">
-                                <input type="text" name="city" placeholder="City" class="form-control">
+                            <div class="col-md-6">
+                                <input type="text" name="city" placeholder="City" 
+                                       class="form-control" required>
                             </div>
-                        </div>
-                        <div class="row g-2 mt-2">
-                            <div class="col">
-                                <input type="text" name="state" placeholder="State" class="form-control">
+                            <div class="col-md-6">
+                                <input type="text" name="state" placeholder="State" 
+                                       class="form-control" required>
                             </div>
-                            <div class="col">
-                                <input type="number" name="pincode" placeholder="Pincode" class="form-control">
+                            <div class="col-md-6">
+                                <input type="number" name="pincode" placeholder="Pincode" 
+                                       class="form-control" required>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Payment Summary -->
-                <div class="col-md-6">
-                    <p class="text-center fs-4">Payment</p>
-                    <hr>
-
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <table class="table table-borderless">
-                                <tbody>
-                                    <tr>
-                                        <td>Total price</td>
-                                        <td>:</td>
-                                        <td>₹ [[${orderPrice}]]</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Delivery Fee</td>
-                                        <td>:</td>
-                                        <td>₹ 250</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tax</td>
-                                        <td>:</td>
-                                        <td>₹ 100</td>
-                                    </tr>
-                                    <tr class="border-top">
-                                        <td>Total</td>
-                                        <td>:</td>
-                                        <td>₹ [[${totalOrderPrice}]]</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                <div class="col-lg-5">
+                    <div class="checkout-card">
+                        <h3 class="section-title">
+                            <i class="fas fa-receipt"></i> Order Summary
+                        </h3>
+                        <table class="table summary-table">
+                            <tbody>
+                                <tr>
+                                    <td>Subtotal</td>
+                                    <td class="text-end">฿[[${orderPrice}]]</td>
+                                </tr>
+                                <tr>
+                                    <td>Delivery Fee</td>
+                                    <td class="text-end">฿250</td>
+                                </tr>
+                                <tr>
+                                    <td>Tax</td>
+                                    <td class="text-end">฿100</td>
+                                </tr>
+                                <tr class="summary-total">
+                                    <td><strong>Total</strong></td>
+                                    <td class="text-end"><strong>฿[[${totalOrderPrice}]]</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
 
-                    <div class="card p-3 rounded">
-                        <div class="mb-3">
-                            <select name="paymentType" class="form-control">
-                                <option value="">--Select Payment--</option>
-                                <option value="COD">Cash On Delivery</option>
-                                <option value="ONLINE">Online Payment</option>
-                            </select>
-                        </div>
-                        <button class="btn btn-primary w-100">Place Order</button>
+                    <div class="checkout-card">
+                        <h3 class="section-title">
+                            <i class="fas fa-credit-card"></i> Payment Method
+                        </h3>
+                        <select name="paymentType" class="form-control mb-3" required>
+                            <option value="">Select Payment Method</option>
+                            <option value="COD">Cash On Delivery</option>
+                            <option value="ONLINE">Online Payment</option>
+                        </select>
+                        <button type="submit" class="btn btn-place-order">
+                            <i class="fas fa-check-circle"></i> Place Order
+                        </button>
                     </div>
-
                 </div>
             </div>
         </form>
     </div>
-
 </section>
 </body>
 </html>

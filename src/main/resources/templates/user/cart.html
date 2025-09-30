@@ -3,88 +3,196 @@
       th:replace="~{base::layout(~{::section})}">
 <head>
     <meta charset="UTF-8">
-    <title>Cart Page</title>
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <title>Shopping Cart - Shopit</title>
+    <style>
+        .cart-section {
+            min-height: 80vh;
+            padding: 2rem 0;
+            background: #f8f9fa;
+        }
+        .cart-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+            border: none;
+        }
+        .cart-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .cart-header h3 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        .cart-table {
+            margin: 0;
+        }
+        .cart-table thead {
+            background: #f8f9fa;
+        }
+        .cart-table th {
+            font-weight: 600;
+            color: #2d3748;
+            padding: 1rem;
+            border: none;
+        }
+        .cart-table td {
+            padding: 1rem;
+            vertical-align: middle;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .cart-img {
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .quantity-control {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.5rem 1rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+        .quantity-control a {
+            color: #667eea;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        .quantity-control a:hover {
+            color: #764ba2;
+            transform: scale(1.2);
+        }
+        .total-row {
+            background: #f8f9fa;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+        .btn-checkout {
+            padding: 1rem 3rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        .btn-checkout:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+            color: white;
+        }
+        .empty-cart {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+        .empty-cart i {
+            font-size: 5rem;
+            color: #cbd5e0;
+            margin-bottom: 1rem;
+        }
+        .empty-cart h4 {
+            color: #4a5568;
+            margin-bottom: 1rem;
+        }
+    </style>
 </head>
 <body>
-<section>
-    <div class="container-fluid mt-5 p-5">
-        <div class="card card-sh">
-            <div class="card-header text-center">
-                <p class="fs-4">Cart Page</p>
-
-                <!-- Success Message -->
-                <th:block th:if="${session.succMsg}">
-                    <p class="text-success fw-bold">[[${session.succMsg}]]</p>
-                    <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
-                </th:block>
-
-                <!-- Error Message -->
-                <th:block th:if="${session.errorMsg}">
-                    <p class="text-danger fw-bold">[[${session.errorMsg}]]</p>
-                    <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
-                </th:block>
+<section class="cart-section">
+    <div class="container">
+        <div class="cart-card">
+            <div class="cart-header">
+                <h3><i class="fas fa-shopping-cart"></i> Shopping Cart</h3>
             </div>
 
-            <div class="card-body">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Sl No</th>
-                            <th scope="col">Image</th>
-                            <th scope="col">Product Name</th>
-                            <th scope="col">Price</th>
-                            <th scope="col" class="text-center">Quantity</th>
-                            <th scope="col">Total Price</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Cart Items -->
-                        <tr th:each="cart,c:${carts}">
-                            <th scope="row">[[${c.count}]]</th>
-                            <td>
-                                <img th:src="@{'/img/product_img/'+${cart.product.image}}"
-                                     width="70" height="70" alt="Product">
-                            </td>
-                            <td>[[${cart.product.title}]]</td>
-                            <!-- ราคาต่อชิ้น -->
-                            <td>
-                                [[${#numbers.formatDecimal(cart.product.discountPrice, 1, 'COMMA', 2, 'POINT')}]] บาท
-                            </td>
-                            <!-- จำนวนสินค้า -->
-                            <td class="text-center">
-                                <a th:href="@{'/user/cartQuantityUpdate?sy=de&cid='+${cart.id}}">
-                                    <i class="fa-solid fa-minus"></i>
-                                </a>
-                                [ [[${cart.quantity}]] ]
-                                <a th:href="@{'/user/cartQuantityUpdate?sy=in&cid='+${cart.id}}">
-                                    <i class="fa-solid fa-plus"></i>
-                                </a>
-                            </td>
-                            <!-- ราคารวมต่อชิ้น -->
-                            <td>
-                                [[${#numbers.formatDecimal(cart.totalPrice, 1, 'COMMA', 2, 'POINT')}]] บาท
-                            </td>
-                        </tr>
+            <div class="card-body p-4">
+                <th:block th:if="${session.succMsg}">
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle"></i> [[${session.succMsg}]]
+                    </div>
+                    <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+                </th:block>
 
-                        <!-- ราคารวมทั้งหมด -->
-                        <tr>
-                            <td colspan="4"></td>
-                            <td class="fw-bold">Total Price</td>
-                            <td class="fw-bold">
-                                [[${#numbers.formatDecimal(totalOrderPrice, 1, 'COMMA', 2, 'POINT')}]] บาท
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <th:block th:if="${session.errorMsg}">
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-circle"></i> [[${session.errorMsg}]]
+                    </div>
+                    <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+                </th:block>
 
-                <!-- Proceed to Payment -->
-                <div class="text-center">
-                    <a href="/user/orders" class="btn btn-warning">Proceed Payment</a>
-                </div>
+                <th:block th:if="${#lists.size(carts) > 0}">
+                    <div class="table-responsive">
+                        <table class="table cart-table">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Image</th>
+                                    <th>Product</th>
+                                    <th>Price</th>
+                                    <th class="text-center">Quantity</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="cart,c:${carts}">
+                                    <td>[[${c.count}]]</td>
+                                    <td>
+                                        <img th:src="@{'/img/product_img/'+${cart.product.image}}"
+                                             class="cart-img" width="70" height="70">
+                                    </td>
+                                    <td>
+                                        <strong>[[${cart.product.title}]]</strong>
+                                    </td>
+                                    <td>
+                                        ฿[[${#numbers.formatDecimal(cart.product.discountPrice, 1, 'COMMA', 2, 'POINT')}]]
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="quantity-control">
+                                            <a th:href="@{'/user/cartQuantityUpdate?sy=de&cid='+${cart.id}}">
+                                                <i class="fa-solid fa-minus"></i>
+                                            </a>
+                                            <strong>[[${cart.quantity}]]</strong>
+                                            <a th:href="@{'/user/cartQuantityUpdate?sy=in&cid='+${cart.id}}">
+                                                <i class="fa-solid fa-plus"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <strong>฿[[${#numbers.formatDecimal(cart.totalPrice, 1, 'COMMA', 2, 'POINT')}]]</strong>
+                                    </td>
+                                </tr>
+                                <tr class="total-row">
+                                    <td colspan="5" class="text-end">Total Amount:</td>
+                                    <td>
+                                        <strong>฿[[${#numbers.formatDecimal(totalOrderPrice, 1, 'COMMA', 2, 'POINT')}]]</strong>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <a href="/user/orders" class="btn btn-checkout">
+                            <i class="fas fa-credit-card"></i> Proceed to Checkout
+                        </a>
+                    </div>
+                </th:block>
+
+                <th:block th:if="${#lists.size(carts) == 0}">
+                    <div class="empty-cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <h4>Your cart is empty</h4>
+                        <p class="text-muted">Add some products to get started!</p>
+                        <a href="/products" class="btn btn-checkout mt-3">
+                            <i class="fas fa-shopping-bag"></i> Start Shopping
+                        </a>
+                    </div>
+                </th:block>
             </div>
         </div>
     </div>

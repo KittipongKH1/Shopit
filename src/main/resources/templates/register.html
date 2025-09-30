@@ -2,101 +2,146 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       th:replace="~{base::layout(~{::section})}">
 <head>
-    <meta charset="ISO-8859-1">
-    <title>Register</title>
+    <meta charset="UTF-8">
+    <title>Register - Shopit</title>
+    <style>
+        .register-section {
+            min-height: 100vh;
+            padding: 3rem 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        .register-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            padding: 2.5rem;
+        }
+        .register-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .register-header h3 {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+        .form-control {
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        .btn-register {
+            padding: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+    </style>
 </head>
 <body>
-<section>
-    <div class="container mt-5 p-5">
+<section class="register-section">
+    <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <div class="card shadow p-3 mb-5 bg-body-tertiary rounded">
-
-                    <!-- Header -->
-                    <div class="card-header text-center">
-                        <p class="fs-4 text-center">Register</p>
-                        
-                        <!-- Success message -->
-                        <th:block th:if="${session.succMsg}">
-                            <p class="text-success fw-bold">[[${session.succMsg}]]</p>
-                            <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
-                        </th:block>
-
-                        <!-- Error message -->
-                        <th:block th:if="${session.errorMsg}">
-                            <p class="text-danger fw-bold">[[${session.errorMsg}]]</p>
-                            <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
-                        </th:block>
+                <div class="register-card">
+                    <div class="register-header">
+                        <h3><i class="fas fa-user-plus"></i> Create Account</h3>
+                        <p class="text-muted">Join Shopit today!</p>
                     </div>
 
-                    <!-- Body -->
-                    <div class="card-body">
-                        <form action="/saveUser" enctype="multipart/form-data" id="userRegister" novalidate method="post">
-                            
-                            <div class="row mb-3">
-                                <div class="col">
-                                    <label class="form-label">Full Name</label>
-                                    <input required class="form-control" name="name" type="text">
-                                </div>
-                                <div class="col">
-                                    <label class="form-label">Mobile Number</label>
-                                    <input required class="form-control" name="mobileNumber" type="number">
-                                </div>
+                    <th:block th:if="${session.succMsg}">
+                        <div class="alert alert-success">[[${session.succMsg}]]</div>
+                        <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+                    </th:block>
+
+                    <th:block th:if="${session.errorMsg}">
+                        <div class="alert alert-danger">[[${session.errorMsg}]]</div>
+                        <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+                    </th:block>
+
+                    <form action="/saveUser" enctype="multipart/form-data" id="userRegister" method="post">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-user"></i> Full Name</label>
+                                <input required class="form-control" name="name" type="text">
                             </div>
-
-                            <div class="mb-3">
-                                <label class="form-label">Email</label>
-                                <input required class="form-control" name="email" type="email">
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-phone"></i> Mobile Number</label>
+                                <input required class="form-control" name="mobileNumber" type="number">
                             </div>
+                        </div>
 
-                            <div class="row mb-3">
-                                <div class="col">
-                                    <label class="form-label">Address</label>
-                                    <input required class="form-control" name="address" type="text">
-                                </div>
-                                <div class="col">
-                                    <label class="form-label">City</label>
-                                    <input required class="form-control" name="city" type="text">
-                                </div>
+                        <div class="mb-3">
+                            <label class="form-label"><i class="fas fa-envelope"></i> Email</label>
+                            <input required class="form-control" name="email" type="email">
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-map-marker-alt"></i> Address</label>
+                                <input required class="form-control" name="address" type="text">
                             </div>
-
-                            <div class="row mb-3">
-                                <div class="col">
-                                    <label class="form-label">State</label>
-                                    <input required class="form-control" name="state" type="text">
-                                </div>
-                                <div class="col">
-                                    <label class="form-label">Pincode</label>
-                                    <input required class="form-control" name="pincode" type="number">
-                                </div>
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-city"></i> City</label>
+                                <input required class="form-control" name="city" type="text">
                             </div>
+                        </div>
 
-                            <div class="row mb-3">
-                                <div class="col">
-                                    <label class="form-label">Password</label>
-                                    <input required class="form-control" name="password" type="password" id="pass">
-                                </div>
-                                <div class="col">
-                                    <label class="form-label">Confirm Password</label>
-                                    <input required class="form-control" name="confirmpassword" type="password">
-                                </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-flag"></i> State</label>
+                                <input required class="form-control" name="state" type="text">
                             </div>
-
-                            <div class="mb-3">
-                                <label class="form-label">Profile Image</label>
-                                <input class="form-control" name="img" type="file">
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-mailbox"></i> Pincode</label>
+                                <input required class="form-control" name="pincode" type="number">
                             </div>
+                        </div>
 
-                            <button type="submit" class="btn bg-primary text-white col-md-12">Register</button>
-                        </form>
-                    </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-lock"></i> Password</label>
+                                <input required class="form-control" name="password" type="password" id="pass">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label"><i class="fas fa-lock"></i> Confirm Password</label>
+                                <input required class="form-control" name="confirmpassword" type="password">
+                            </div>
+                        </div>
 
-                    <!-- Footer -->
-                    <div class="card-footer text-center">
+                        <div class="mb-3">
+                            <label class="form-label"><i class="fas fa-image"></i> Profile Image</label>
+                            <input class="form-control" name="img" type="file">
+                        </div>
+
+                        <button type="submit" class="btn btn-register w-100">
+                            <i class="fas fa-user-plus"></i> Register Now
+                        </button>
+                    </form>
+
+                    <div class="text-center mt-3">
                         Already have an account? 
-                        <a href="/login" class="text-decoration-none">Login</a>
+                        <a href="/signin" style="color: #667eea; font-weight: 600;">Login</a>
                     </div>
-
                 </div>
             </div>
         </div>
