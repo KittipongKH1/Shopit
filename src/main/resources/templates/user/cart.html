@@ -1,134 +1,35 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       th:replace="~{base::layout(~{::section})}">
-<head>
-    <meta charset="UTF-8">
-    <title>Shopping Cart - Shop IT</title>
-    <style>
-        .cart-section {
-            min-height: 80vh;
-            padding: 2rem 0;
-            background: #f8f9fa;
-        }
-        .cart-card {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            overflow: hidden;
-            border: none;
-        }
-        .cart-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 1.5rem;
-            text-align: center;
-        }
-        .cart-header h3 {
-            margin: 0;
-            font-size: 1.8rem;
-            font-weight: 700;
-        }
-        .cart-table {
-            margin: 0;
-        }
-        .cart-table thead {
-            background: #f8f9fa;
-        }
-        .cart-table th {
-            font-weight: 600;
-            color: #2d3748;
-            padding: 1rem;
-            border: none;
-        }
-        .cart-table td {
-            padding: 1rem;
-            vertical-align: middle;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        .cart-img {
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        .quantity-control {
-            display: inline-flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 0.5rem 1rem;
-            background: #f8f9fa;
-            border-radius: 12px;
-        }
-        .quantity-control a {
-            color: #667eea;
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
-        }
-        .quantity-control a:hover {
-            color: #764ba2;
-            transform: scale(1.2);
-        }
-        .total-row {
-            background: #f8f9fa;
-            font-weight: 700;
-            font-size: 1.2rem;
-        }
-        .btn-checkout {
-            padding: 1rem 3rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            border-radius: 12px;
-            color: white;
-            font-weight: 700;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        }
-        .btn-checkout:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-            color: white;
-        }
-        .empty-cart {
-            text-align: center;
-            padding: 4rem 2rem;
-        }
-        .empty-cart i {
-            font-size: 5rem;
-            color: #cbd5e0;
-            margin-bottom: 1rem;
-        }
-        .empty-cart h4 {
-            color: #4a5568;
-            margin-bottom: 1rem;
-        }
-    </style>
-</head>
-<body>
-<section class="cart-section">
+<section class="cart-section py-5">
     <div class="container">
-        <div class="cart-card">
-            <div class="cart-header">
-                <h3><i class="fas fa-shopping-cart"></i> Shopping Cart</h3>
+        <div class="card shadow-sm rounded-4">
+            <div class="card-header text-white text-center"
+                 style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <h3 class="mb-0"><i class="fas fa-shopping-cart"></i> Shopping Cart</h3>
             </div>
 
-            <div class="card-body p-4">
+            <div class="card-body">
+                <!-- Success / Error Messages -->
                 <th:block th:if="${session.succMsg}">
-                    <div class="alert alert-success">
-                        <i class="fas fa-check-circle"></i> [[${session.succMsg}]]
+                    <div class="alert alert-success d-flex align-items-center">
+                        <i class="fas fa-check-circle me-2"></i> [[${session.succMsg}]]
                     </div>
                     <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
                 </th:block>
 
                 <th:block th:if="${session.errorMsg}">
-                    <div class="alert alert-danger">
-                        <i class="fas fa-exclamation-circle"></i> [[${session.errorMsg}]]
+                    <div class="alert alert-danger d-flex align-items-center">
+                        <i class="fas fa-exclamation-circle me-2"></i> [[${session.errorMsg}]]
                     </div>
                     <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
                 </th:block>
 
+                <!-- Cart Table -->
                 <th:block th:if="${#lists.size(carts) > 0}">
                     <div class="table-responsive">
-                        <table class="table cart-table">
-                            <thead>
+                        <table class="table align-middle">
+                            <thead class="table-light">
                                 <tr>
                                     <th>No</th>
                                     <th>Image</th>
@@ -139,57 +40,52 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr th:each="cart,c:${carts}">
+                                <tr th:each="cart, c : ${carts}">
                                     <td>[[${c.count}]]</td>
                                     <td>
                                         <img th:src="@{'/img/product_img/'+${cart.product.image}}"
-                                             class="cart-img" width="70" height="70">
+                                             class="rounded-3 shadow-sm" width="70" height="70">
                                     </td>
-                                    <td>
-                                        <strong>[[${cart.product.title}]]</strong>
-                                    </td>
-                                    <td>
-                                        ฿[[${#numbers.formatDecimal(cart.product.discountPrice, 1, 'COMMA', 2, 'POINT')}]]
-                                    </td>
+                                    <td><strong>[[${cart.product.title}]]</strong></td>
+                                    <td>฿[[${#numbers.formatDecimal(cart.product.discountPrice, 1, 'COMMA', 2, 'POINT')}]]</td>
                                     <td class="text-center">
-                                        <div class="quantity-control">
-                                            <a th:href="@{'/user/cartQuantityUpdate?sy=de&cid='+${cart.id}}">
+                                        <div class="d-inline-flex align-items-center bg-light rounded-3 px-2 py-1">
+                                            <a th:href="@{'/user/cartQuantityUpdate?sy=de&cid='+${cart.id}}" class="text-primary fs-5 me-2">
                                                 <i class="fa-solid fa-minus"></i>
                                             </a>
                                             <strong>[[${cart.quantity}]]</strong>
-                                            <a th:href="@{'/user/cartQuantityUpdate?sy=in&cid='+${cart.id}}">
+                                            <a th:href="@{'/user/cartQuantityUpdate?sy=in&cid='+${cart.id}}" class="text-primary fs-5 ms-2">
                                                 <i class="fa-solid fa-plus"></i>
                                             </a>
                                         </div>
                                     </td>
-                                    <td>
-                                        <strong>฿[[${#numbers.formatDecimal(cart.totalPrice, 1, 'COMMA', 2, 'POINT')}]]</strong>
-                                    </td>
+                                    <td><strong>฿[[${#numbers.formatDecimal(cart.totalPrice, 1, 'COMMA', 2, 'POINT')}]]</strong></td>
                                 </tr>
-                                <tr class="total-row">
+                                <tr class="fw-bold">
                                     <td colspan="5" class="text-end">Total Amount:</td>
-                                    <td>
-                                        <strong>฿[[${#numbers.formatDecimal(totalOrderPrice, 1, 'COMMA', 2, 'POINT')}]]</strong>
-                                    </td>
+                                    <td>฿[[${#numbers.formatDecimal(totalOrderPrice, 1, 'COMMA', 2, 'POINT')}]]</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
 
                     <div class="text-center mt-4">
-                        <a href="/user/orders" class="btn btn-checkout">
-                            <i class="fas fa-credit-card"></i> Proceed to Checkout
+                        <a href="/user/orders" class="btn btn-primary px-5 py-2 fw-bold"
+                           style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius:12px;">
+                            <i class="fas fa-credit-card me-2"></i> Proceed to Checkout
                         </a>
                     </div>
                 </th:block>
 
+                <!-- Empty Cart -->
                 <th:block th:if="${#lists.size(carts) == 0}">
-                    <div class="empty-cart">
-                        <i class="fas fa-shopping-cart"></i>
+                    <div class="text-center py-5 text-muted">
+                        <i class="fas fa-shopping-cart fs-1 mb-3"></i>
                         <h4>Your cart is empty</h4>
-                        <p class="text-muted">Add some products to get started!</p>
-                        <a href="/products" class="btn btn-checkout mt-3">
-                            <i class="fas fa-shopping-bag"></i> Start Shopping
+                        <p>Add some products to get started!</p>
+                        <a href="/products" class="btn btn-primary px-4 py-2 mt-3"
+                           style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius:12px;">
+                            <i class="fas fa-shopping-bag me-2"></i> Start Shopping
                         </a>
                     </div>
                 </th:block>
@@ -197,5 +93,4 @@
         </div>
     </div>
 </section>
-</body>
 </html>

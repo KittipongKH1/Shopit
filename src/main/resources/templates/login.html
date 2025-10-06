@@ -9,24 +9,25 @@
 <section>
     <div class="container mt-5 p-5">
         <div class="row justify-content-center">
-            
+
             <!-- Login Form -->
             <div class="col-md-6">
                 <div class="card shadow p-3 mb-5 bg-body-tertiary rounded">
 
                     <!-- Header -->
                     <div class="card-header text-center">
-                        <p class="fs-4">Login</p>
+                        <!-- ใช้ class เดียวกับ navbar-brand เพื่อให้เป็น gradient -->
+                        <h2 class="navbar-brand m-0">Login</h2>
 
                         <!-- Error Message -->
-                        <div th:if="${param.error}" class="alert alert-danger text-center">
+                        <div th:if="${param.error}" class="alert alert-danger text-center mt-3">
                             <th:block th:if="${session.SPRING_SECURITY_LAST_EXCEPTION != null}">
                                 [[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]
                             </th:block>
                         </div>
 
                         <!-- Logout Success -->
-                        <div th:if="${param.logout}" class="alert alert-success text-center">
+                        <div th:if="${param.logout}" class="alert alert-success text-center mt-3">
                             Logout Success
                         </div>
                     </div>
@@ -36,15 +37,19 @@
                         <form action="/login" method="post">
                             <div class="mb-3">
                                 <label class="form-label">Email</label>
-                                <input required class="form-control" name="username" type="email">
+                                <input required class="form-control" name="username" type="email"
+                                       placeholder="Enter your email">
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">Password</label>
-                                <input required class="form-control" name="password" type="password">
+                                <input required class="form-control" name="password" type="password"
+                                       placeholder="Enter your password">
                             </div>
 
-                            <button type="submit" class="btn bg-primary text-white col-md-12">
+                            <!-- ใช้ gradient เดียวกับ cart-badge -->
+                            <button type="submit"
+                                    class="btn cart-badge w-100">
                                 Login
                             </button>
                         </form>
@@ -53,7 +58,7 @@
                     <!-- Footer -->
                     <div class="card-footer text-center">
                         <a href="/forgot-password" class="text-decoration-none">Forgot Password?</a><br>
-                        Don't have an account? 
+                        Don’t have an account? 
                         <a href="/register" class="text-decoration-none">Create Account</a>
                     </div>
 

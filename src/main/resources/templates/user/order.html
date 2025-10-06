@@ -1,88 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       th:replace="~{base::layout(~{::section})}">
-<head>
-    <meta charset="UTF-8">
-    <title>Checkout - Shop IT</title>
-    <style>
-        .checkout-section {
-            padding: 3rem 0;
-            background: #f8f9fa;
-            min-height: 80vh;
-        }
-        .checkout-card {
-            background: white;
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            margin-bottom: 2rem;
-        }
-        .section-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #2d3748;
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 3px solid #667eea;
-        }
-        .form-control {
-            padding: 0.75rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-        }
-        .form-control:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-        .summary-table {
-            margin: 0;
-        }
-        .summary-table td {
-            padding: 0.75rem;
-            border: none;
-        }
-        .summary-total {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #667eea;
-            border-top: 2px solid #e2e8f0;
-        }
-        .btn-place-order {
-            width: 100%;
-            padding: 1rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            border-radius: 12px;
-            color: white;
-            font-weight: 700;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        }
-        .btn-place-order:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-        }
-        .payment-option {
-            padding: 1rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            margin-bottom: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .payment-option:hover {
-            border-color: #667eea;
-            background: #f8f9fa;
-        }
-    </style>
-</head>
-<body>
-<section class="checkout-section">
+
+<section th:fragment="section" class="checkout-section">
     <div class="container">
         <form id="orders" action="/user/save-order" method="post">
             <div class="row">
+                <!-- Billing Address -->
                 <div class="col-lg-7">
                     <div class="checkout-card">
                         <h3 class="section-title">
@@ -125,6 +49,7 @@
                     </div>
                 </div>
 
+                <!-- Order Summary & Payment -->
                 <div class="col-lg-5">
                     <div class="checkout-card">
                         <h3 class="section-title">
@@ -169,6 +94,76 @@
             </div>
         </form>
     </div>
+
+    <!-- Page-specific Styles -->
+    <style>
+        .checkout-section {
+            padding: 3rem 0;
+            background: #f8f9fa;
+            min-height: 80vh;
+        }
+        .checkout-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #667eea;
+        }
+        .form-control {
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        .summary-table td {
+            padding: 0.75rem;
+            border: none;
+        }
+        .summary-total {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #667eea;
+            border-top: 2px solid #e2e8f0;
+        }
+        .btn-place-order {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        .btn-place-order:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        .payment-option {
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .payment-option:hover {
+            border-color: #667eea;
+            background: #f8f9fa;
+        }
+    </style>
 </section>
-</body>
-</html>

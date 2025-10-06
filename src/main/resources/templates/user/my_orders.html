@@ -1,116 +1,113 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-	th:replace="~{base::layout(~{::section})}">
-<head>
-<meta charset="UTF-8">
-<title>My Orders - Shop </title>
-<style>
-    .orders-section {
-        padding: 3rem 0;
-        background: #f8f9fa;
-        min-height: 80vh;
-    }
-    .orders-header {
-        text-align: center;
-        margin-bottom: 2rem;
-    }
-    .orders-header h3 {
-        font-size: 2rem;
-        font-weight: 800;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-    .orders-table {
-        background: white;
-        border-radius: 20px;
-        overflow: hidden;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-    }
-    .orders-table thead {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-    }
-    .orders-table th {
-        padding: 1rem;
-        font-weight: 600;
-        border: none;
-    }
-    .orders-table td {
-        padding: 1rem;
-        vertical-align: middle;
-        border-bottom: 1px solid #e2e8f0;
-    }
-    .status-badge {
-        padding: 0.5rem 1rem;
-        border-radius: 20px;
-        font-weight: 600;
-        font-size: 0.9rem;
-    }
-    .btn-cancel {
-        padding: 0.5rem 1.5rem;
-        border-radius: 20px;
-        font-weight: 600;
-        transition: all 0.3s ease;
-    }
-</style>
-</head>
-<body>
-	<section class="orders-section">
-		<div class="container">
-            <div class="orders-header">
-                <h3><i class="fas fa-box"></i> My Orders</h3>
-            </div>
+      th:replace="~{base::layout(~{::section})}">
 
-			<th:block th:if="${session.succMsg}">
-				<div class="alert alert-success">[[${session.succMsg}]]</div>
-				<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
-			</th:block>
+<section th:fragment="section" class="orders-section">
+    <div class="container">
+        <div class="orders-header">
+            <h3><i class="fas fa-box"></i> My Orders</h3>
+        </div>
 
-			<th:block th:if="${session.errorMsg}">
-				<div class="alert alert-danger">[[${session.errorMsg}]]</div>
-				<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
-			</th:block>
+        <!-- Success / Error Messages -->
+        <th:block th:if="${session.succMsg}">
+            <div class="alert alert-success">[[${session.succMsg}]]</div>
+            <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+        </th:block>
 
-			<div class="table-responsive orders-table">
-				<table class="table">
-					<thead>
-						<tr>
-							<th>Order ID</th>
-							<th>Date</th>
-							<th>Product</th>
-							<th>Price Details</th>
-							<th>Status</th>
-							<th>Action</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr th:each="o:${orders}">
-							<td><strong>[[${o.orderId}]]</strong></td>
-							<td>[[${o.orderDate}]]</td>
-							<td>[[${o.product.title}]]</td>
-							<td>
-								Qty: [[${o.quantity}]]<br>
-								Price: ฿[[${o.price}]]<br>
-								<strong>Total: ฿[[${o.quantity * o.price}]]</strong>
-							</td>
-							<td>
-                                <span class="status-badge bg-info text-white">[[${o.status}]]</span>
-                            </td>
-							<td>
-								<th:block th:if="${o.status!='Cancelled'}">
-									<a th:href="@{'/user/update-status?id='+${o.id}+'&st=6'}"
-										class="btn btn-sm btn-danger btn-cancel">Cancel</a>
-								</th:block>
-								<th:block th:unless="${o.status!='Cancelled'}">
-									<span class="text-muted">Cancelled</span>
-								</th:block>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</section>
-</body>
-</html>
+        <th:block th:if="${session.errorMsg}">
+            <div class="alert alert-danger">[[${session.errorMsg}]]</div>
+            <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+        </th:block>
+
+        <div class="table-responsive orders-table">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Date</th>
+                        <th>Product</th>
+                        <th>Price Details</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="o:${orders}">
+                        <td><strong>[[${o.orderId}]]</strong></td>
+                        <td>[[${o.orderDate}]]</td>
+                        <td>[[${o.product.title}]]</td>
+                        <td>
+                            Qty: [[${o.quantity}]]<br>
+                            Price: ฿[[${o.price}]]<br>
+                            <strong>Total: ฿[[${o.quantity * o.price}]]</strong>
+                        </td>
+                        <td>
+                            <span class="status-badge bg-info text-white">[[${o.status}]]</span>
+                        </td>
+                        <td>
+                            <th:block th:if="${o.status!='Cancelled'}">
+                                <a th:href="@{'/user/update-status?id='+${o.id}+'&st=6'}"
+                                   class="btn btn-sm btn-danger btn-cancel">Cancel</a>
+                            </th:block>
+                            <th:block th:unless="${o.status!='Cancelled'}">
+                                <span class="text-muted">Cancelled</span>
+                            </th:block>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Styles specific to this page -->
+    <style>
+        .orders-section {
+            padding: 3rem 0;
+            background: #f8f9fa;
+            min-height: 80vh;
+        }
+        .orders-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .orders-header h3 {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .orders-table {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        .orders-table thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .orders-table th {
+            padding: 1rem;
+            font-weight: 600;
+            border: none;
+        }
+        .orders-table td {
+            padding: 1rem;
+            vertical-align: middle;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .btn-cancel {
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+    </style>
+</section>
