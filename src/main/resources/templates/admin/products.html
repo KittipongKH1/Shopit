@@ -52,8 +52,6 @@
                             <th>Title</th>
                             <th>Category</th>
                             <th>Price</th>
-                            <th>Discount</th>
-                            <th>Discount Price</th>
                             <th>Status</th>
                             <th>Stock</th>
                             <th>Action</th>
@@ -67,9 +65,7 @@
                             </td>
                             <td>[[${p.title}]]</td>
                             <td>[[${p.category}]]</td>
-                            <td>[[${p.price}]]</td>
-                            <td>[[${p.discount}]]</td>
-                            <td>[[${p.discountPrice}]]</td>
+                            <td>฿ [[${p.price}]]</td>
                             <td>
                                 <span th:if="${p.isActive}" class="badge bg-success">Active</span>
                                 <span th:unless="${p.isActive}" class="badge bg-secondary">Inactive</span>

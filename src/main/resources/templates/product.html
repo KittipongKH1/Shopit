@@ -60,14 +60,17 @@
                                             <p class="fs-5 flex-grow-1 product-title-gradient">[[${p.title}]]</p>
 
                                             <p class="fs-6 fw-bold">
-                                                ฿ [[${#numbers.formatDecimal(p.price * (100 - p.discount) / 100.0, 0, 'POINT', 2, 'NONE')}]]
-                                                <span class="text-decoration-line-through text-secondary" th:if="${p.discount>0}">
-                                                    ฿ [[${#numbers.formatDecimal(p.price, 0, 'POINT', 2, 'NONE')}]]
-                                                </span>
-                                                <span class="text-success" th:if="${p.discount>0}">
-                                                    [[${p.discount}]]% off
-                                                </span>
-                                            </p>
+    ฿ [[${T(java.lang.String).format('%.2f', p.price * (100 - p.discount) / 100.0)}]]
+    <span class="text-decoration-line-through text-secondary" th:if="${p.discount>0}">
+        ฿ [[${T(java.lang.String).format('%.2f', p.price)}]]
+    </span>
+    <span class="text-success" th:if="${p.discount>0}">
+        [[${p.discount}]]% off
+    </span>
+</p>
+
+</p>
+
 
                                             <a th:href="@{'/product/'+${p.id}}" class="btn btn-purple mt-auto">View Details</a>
                                         </div>

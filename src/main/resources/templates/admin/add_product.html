@@ -54,7 +54,7 @@
               <!-- Price -->
               <div class="mb-3">
                 <label class="form-label fw-semibold">Price</label>
-                <input type="number" name="price" class="form-control form-control-lg" placeholder="Enter price" required>
+                <input type="number" name="price" class="form-control form-control-lg" placeholder="Enter price" step="0.01" required>
               </div>
 
               <!-- Status -->
@@ -148,5 +148,22 @@
       font-size: 0.95rem;
     }
   </style>
+
+  <!-- Bootstrap 5 validation -->
+  <script>
+    (function () {
+      'use strict'
+      var forms = document.querySelectorAll('.needs-validation')
+      Array.prototype.slice.call(forms).forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+          if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+          form.classList.add('was-validated')
+        }, false)
+      })
+    })()
+  </script>
 </section>
 </html>

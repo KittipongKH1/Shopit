@@ -2,129 +2,261 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       th:replace="~{base::layout(~{::section})}">
 
-<section th:fragment="section" class="product-details-section mt-4">
-    <div class="container card-sh p-4 mb-5">
+<section th:fragment="section">
+  <div class="container mt-4 py-4">
+    <div class="row justify-content-center">
+      <div class="col-md-11 col-lg-10">
+        <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+          
+          <!-- Card Header -->
+          <div class="card-header text-center bg-white border-0 py-3">
+            <h4 class="fw-bold mb-0 text-gradient">Product Details</h4>
+          </div>
 
-        <!-- Success / Error Messages -->
-        <th:block th:if="${session.succMsg}">
-            <p class="alert alert-success text-center" role="alert">
-                [[${session.succMsg}]]
-            </p>
-            <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
-        </th:block>
+          <!-- Card Body - Horizontal Layout -->
+          <div class="card-body p-4">
+            <div class="row g-4">
+              
+              <!-- Left Side - Product Image -->
+              <div class="col-md-5">
+                <div class="image-container rounded-3 overflow-hidden">
+                  <img th:src="@{'/img/product_img/' + ${product.image}}"
+                       class="product-image w-100"
+                       alt="Product Image">
+                  <div class="discount-badge" th:if="${product.discount > 0}">
+                    <span>-[[${product.discount}]]%</span>
+                  </div>
+                </div>
+              </div>
 
-        <th:block th:if="${session.errorMsg}">
-            <p class="alert alert-danger text-center">
-                [[${session.errorMsg}]]
-            </p>
-            <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
-        </th:block>
+              <!-- Right Side - Product Info -->
+              <div class="col-md-7 d-flex flex-column">
+                
+                <!-- Product Title -->
+                <h4 class="fw-bold mb-2 product-title">
+                  [[${product.title}]]
+                </h4>
 
-        <div class="row g-4">
-            <!-- Product Image -->
-            <div class="col-md-6 text-center text-md-end">
-                <img alt="" th:src="@{'/img/product_img/'+${product.image}}" class="img-fluid" style="max-height: 300px;">
-            </div>
+                <!-- Category Badge -->
+                <div class="mb-3">
+                  <span class="badge category-badge px-3 py-2">
+                    <i class="fa-solid fa-tag me-1"></i>[[${product.category}]]
+                  </span>
+                </div>
 
-            <!-- Product Info -->
-            <div class="col-md-6">
-                <!-- Product Title with Gradient -->
-                <p class="fs-3 fw-bold product-title-gradient">[[${product.title}]]</p>
+                <!-- Price Section -->
+                <div class="price-section mb-3 p-3 rounded-3">
+                  <div class="d-flex align-items-center gap-3 flex-wrap">
+                    <h4 class="fw-bold text-success mb-0 price-current">
+                      ฿ [[${#numbers.formatDecimal(product.price * (100 - product.discount) / 100.0, 1, 2, 'POINT')}]]
+                    </h4>
+                    <div th:if="${product.discount > 0}">
+                      <span class="text-decoration-line-through text-muted price-old">
+                        ฿ [[${#numbers.formatDecimal(product.price, 1, 2, 'POINT')}]]
+                      </span>
+                    </div>
+                  </div>
+                </div>
 
-                <p>
-                    <span class="fw-bold">Description:</span><br>
+                <!-- Description -->
+                <div class="description-section mb-3 flex-grow-1">
+                  <h6 class="fw-semibold mb-2 section-title">
+                    <i class="fa-solid fa-circle-info me-2"></i>Description
+                  </h6>
+                  <p class="text-secondary description-text mb-0">
                     [[${product.description}]]
-                </p>
-
-                <p>
-                    <span class="fw-bold">Product Details:</span><br>
-                    Status:
-                    <span th:if="${product.stock>0}" class="badge bg-success">Available</span>
-                    <span th:unless="${product.stock>0}" class="badge bg-warning">Out of stock</span>
-                    <br>
-                    Category: [[${product.category}]]<br>
-                    Policy: 7 Days Replacement & Return
-                </p>
-
-                <!-- Price -->
-                <p class="fs-5 fw-bold">
-                    Price: 
-                    ฿ [[${#numbers.formatDecimal(product.price * (100 - product.discount) / 100.0, 0, 'POINT', 2, 'NONE')}]]
-                    <span class="fs-6 text-decoration-line-through text-secondary" th:if="${product.discount>0}">
-                        ฿ [[${#numbers.formatDecimal(product.price, 0, 'POINT', 2, 'NONE')}]]
-                    </span>
-                    <span class="fs-6 text-success" th:if="${product.discount>0}">
-                        [[${product.discount}]]% off
-                    </span>
-                </p>
-
-                <!-- Features -->
-                <div class="row text-center mb-3">
-                    <div class="col-4 text-success p-2">
-                        <i class="fas fa-money-bill-wave fa-2x"></i>
-                        <p class="mb-0">Cash On Delivery</p>
-                    </div>
-                    <div class="col-4 text-danger p-2">
-                        <i class="fas fa-undo-alt fa-2x"></i>
-                        <p class="mb-0">Return Available</p>
-                    </div>
-                    <div class="col-4 text-primary p-2">
-                        <i class="fas fa-truck-moving fa-2x"></i>
-                        <p class="mb-0">Free Shipping</p>
-                    </div>
+                  </p>
                 </div>
 
-                <!-- Add to Cart Button -->
-                <div class="d-grid">
-                    <th:block th:if="${product.stock>0}">
-                        <th:block th:if="${user==null}">
-                            <a href="/signin" class="btn btn-purple">Add To Cart</a>
-                        </th:block>
-                        <th:block th:unless="${user==null}">
-                            <a th:href="@{'/user/addCart?pid='+${product.id}+'&uid='+${user.id}}"
-                               class="btn btn-purple">Add To Cart</a>
-                        </th:block>
-                    </th:block>
-
-                    <th:block th:unless="${product.stock>0}">
-                        <a href="#" class="btn btn-purple-disabled">Out of Stock</a>
-                    </th:block>
+                <!-- Action Buttons -->
+                <div class="d-flex gap-2 mt-auto">
+                  <a th:href="@{/cart/add/{id}(id=${product.id})}" 
+                     class="btn btn-purple flex-fill py-2 fw-bold">
+                    <i class="fa-solid fa-cart-plus me-2"></i> Add to Cart
+                  </a>
+                  <a th:href="@{/products}" 
+                     class="btn btn-outline-purple flex-fill py-2 fw-semibold">
+                    <i class="fa-solid fa-arrow-left me-2"></i> Back
+                  </a>
                 </div>
+
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 
-    <!-- Custom CSS -->
-    <style>
-        /* Gradient for product title */
-        .product-title-gradient {
-            font-weight: 800;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
+  <!-- Styles -->
+  <style>
+    body {
+      background-color: #f9f8ff;
+      font-family: 'Poppins', sans-serif;
+    }
 
-        /* Base purple button */
-        .btn-purple {
-            background-color: #6f42c1; /* base purple */
-            color: #fff;
-            border: none;
-            font-weight: 600;
-        }
-        .btn-purple:hover {
-            background-color: #5a32a3; /* darker purple on hover */
-            color: #fff;
-        }
+    .text-gradient {
+      background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
 
-        /* Disabled / out of stock button */
-        .btn-purple-disabled {
-            background-color: #d3bdfd; /* light purple */
-            color: #fff;
-            border: none;
-            cursor: not-allowed;
-        }
-    </style>
+    .card {
+      background: white;
+      transition: transform 0.3s ease;
+    }
 
+    .image-container {
+      position: relative;
+      background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+      height: 100%;
+      min-height: 350px;
+    }
+
+    .product-image {
+      height: 100%;
+      min-height: 350px;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .product-image:hover {
+      transform: scale(1.05);
+    }
+
+    .discount-badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 1rem;
+      box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+    }
+
+    .product-title {
+      color: #4c1d95;
+      font-size: 1.6rem;
+    }
+
+    .category-badge {
+      background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+      color: white;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border-radius: 50px;
+      letter-spacing: 0.5px;
+    }
+
+    .price-section {
+      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+      border: 2px solid #86efac;
+    }
+
+    .price-current {
+      font-size: 1.8rem;
+      color: #16a34a;
+    }
+
+    .price-old {
+      font-size: 1.1rem;
+    }
+
+    .section-title {
+      color: #4c1d95;
+      border-bottom: 2px solid #8b5cf6;
+      display: inline-block;
+      padding-bottom: 5px;
+      font-size: 1rem;
+    }
+
+    .description-text {
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+
+    .btn-purple {
+      background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      letter-spacing: 0.5px;
+      font-size: 0.95rem;
+    }
+
+    .btn-purple:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(124, 58, 237, 0.4);
+      color: white;
+    }
+
+    .btn-outline-purple {
+      background: transparent;
+      color: #7c3aed;
+      border: 2px solid #8b5cf6;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      letter-spacing: 0.5px;
+      font-size: 0.95rem;
+    }
+
+    .btn-outline-purple:hover {
+      background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+      color: white;
+      border-color: transparent;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(124, 58, 237, 0.3);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .image-container {
+        min-height: 250px;
+      }
+
+      .product-image {
+        min-height: 250px;
+      }
+
+      .product-title {
+        font-size: 1.3rem;
+      }
+
+      .price-current {
+        font-size: 1.5rem;
+      }
+    }
+
+    /* Animation on load */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .card {
+      animation: fadeInUp 0.6s ease;
+    }
+  </style>
 </section>
 </html>
