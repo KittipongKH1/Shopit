@@ -1,5 +1,7 @@
 package com.ecom.model;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,7 +31,7 @@ public class Product {
 
 	private String category;
 
-	private Double price;
+	private double price;
 
 	public Integer getId() {
 		return id;
@@ -63,11 +65,11 @@ public class Product {
 		this.category = category;
 	}
 
-	public Double getPrice() {
+	public double getPrice() {
 		return price;
 	}
 
-	public void setPrice(Double price) {
+	public void setPrice(double price) {
 		this.price = price;
 	}
 

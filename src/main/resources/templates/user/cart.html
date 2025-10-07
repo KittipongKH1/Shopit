@@ -50,11 +50,13 @@
                                     <td>฿[[${#numbers.formatDecimal(cart.product.discountPrice, 1, 'COMMA', 2, 'POINT')}]]</td>
                                     <td class="text-center">
                                         <div class="d-inline-flex align-items-center bg-light rounded-3 px-2 py-1">
-                                            <a th:href="@{'/user/cartQuantityUpdate?sy=de&cid='+${cart.id}}" class="text-primary fs-5 me-2">
+                                            <!-- ลดจำนวนสินค้า -->
+                                            <a th:href="@{/user/cartQuantityUpdate(sy='de',cid=${cart.id})}" class="text-primary fs-5 me-2">
                                                 <i class="fa-solid fa-minus"></i>
                                             </a>
                                             <strong>[[${cart.quantity}]]</strong>
-                                            <a th:href="@{'/user/cartQuantityUpdate?sy=in&cid='+${cart.id}}" class="text-primary fs-5 ms-2">
+                                            <!-- เพิ่มจำนวนสินค้า -->
+                                            <a th:href="@{/user/cartQuantityUpdate(sy='in',cid=${cart.id})}" class="text-primary fs-5 ms-2">
                                                 <i class="fa-solid fa-plus"></i>
                                             </a>
                                         </div>

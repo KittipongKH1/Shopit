@@ -7,52 +7,52 @@
     <div class="row justify-content-center">
       <div class="col-md-11 col-lg-10">
         <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
-          
+
           <!-- Card Header -->
           <div class="card-header text-center bg-white border-0 py-3">
             <h4 class="fw-bold mb-0 text-gradient">Product Details</h4>
           </div>
 
-          <!-- Card Body - Horizontal Layout -->
+          <!-- Card Body -->
           <div class="card-body p-4">
             <div class="row g-4">
-              
-              <!-- Left Side - Product Image -->
+
+              <!-- Left - Product Image -->
               <div class="col-md-5">
                 <div class="image-container rounded-3 overflow-hidden">
                   <img th:src="@{'/img/product_img/' + ${product.image}}"
                        class="product-image w-100"
-                       alt="Product Image">
+                       alt="[[${product.title}]] Image"
+                       loading="lazy"
+                       onerror="this.src='/img/default-product.png';">
                   <div class="discount-badge" th:if="${product.discount > 0}">
                     <span>-[[${product.discount}]]%</span>
                   </div>
                 </div>
               </div>
 
-              <!-- Right Side - Product Info -->
+              <!-- Right - Product Info -->
               <div class="col-md-7 d-flex flex-column">
-                
-                <!-- Product Title -->
-                <h4 class="fw-bold mb-2 product-title">
-                  [[${product.title}]]
-                </h4>
 
-                <!-- Category Badge -->
+                <!-- Title -->
+                <h4 class="fw-bold mb-2 product-title">[[${product.title}]]</h4>
+
+                <!-- Category -->
                 <div class="mb-3">
                   <span class="badge category-badge px-3 py-2">
                     <i class="fa-solid fa-tag me-1"></i>[[${product.category}]]
                   </span>
                 </div>
 
-                <!-- Price Section -->
+                <!-- Price -->
                 <div class="price-section mb-3 p-3 rounded-3">
                   <div class="d-flex align-items-center gap-3 flex-wrap">
                     <h4 class="fw-bold text-success mb-0 price-current">
-                      ฿ [[${#numbers.formatDecimal(product.price * (100 - product.discount) / 100.0, 1, 2, 'POINT')}]]
+                      ฿ [[${#numbers.formatDecimal(product.price * (100 - product.discount) / 100, 2, 2)}]]
                     </h4>
                     <div th:if="${product.discount > 0}">
                       <span class="text-decoration-line-through text-muted price-old">
-                        ฿ [[${#numbers.formatDecimal(product.price, 1, 2, 'POINT')}]]
+                        ฿ [[${#numbers.formatDecimal(product.price, 2, 2)}]]
                       </span>
                     </div>
                   </div>
@@ -70,10 +70,12 @@
 
                 <!-- Action Buttons -->
                 <div class="d-flex gap-2 mt-auto">
-                  <a th:href="@{/cart/add/{id}(id=${product.id})}" 
+                  <!-- Add to Cart -->
+                  <a th:href="@{/user/addCart(pid=${product.id}, uid=${user.id})}" 
                      class="btn btn-purple flex-fill py-2 fw-bold">
                     <i class="fa-solid fa-cart-plus me-2"></i> Add to Cart
                   </a>
+                  <!-- Back -->
                   <a th:href="@{/products}" 
                      class="btn btn-outline-purple flex-fill py-2 fw-semibold">
                     <i class="fa-solid fa-arrow-left me-2"></i> Back
@@ -90,173 +92,32 @@
 
   <!-- Styles -->
   <style>
-    body {
-      background-color: #f9f8ff;
-      font-family: 'Poppins', sans-serif;
-    }
-
-    .text-gradient {
-      background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .card {
-      background: white;
-      transition: transform 0.3s ease;
-    }
-
-    .image-container {
-      position: relative;
-      background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-      height: 100%;
-      min-height: 350px;
-    }
-
-    .product-image {
-      height: 100%;
-      min-height: 350px;
-      object-fit: cover;
-      transition: transform 0.4s ease;
-    }
-
-    .product-image:hover {
-      transform: scale(1.05);
-    }
-
-    .discount-badge {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-      color: white;
-      padding: 8px 16px;
-      border-radius: 50px;
-      font-weight: 700;
-      font-size: 1rem;
-      box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% {
-        transform: scale(1);
-      }
-      50% {
-        transform: scale(1.05);
-      }
-    }
-
-    .product-title {
-      color: #4c1d95;
-      font-size: 1.6rem;
-    }
-
-    .category-badge {
-      background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-      color: white;
-      font-size: 0.9rem;
-      font-weight: 600;
-      border-radius: 50px;
-      letter-spacing: 0.5px;
-    }
-
-    .price-section {
-      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-      border: 2px solid #86efac;
-    }
-
-    .price-current {
-      font-size: 1.8rem;
-      color: #16a34a;
-    }
-
-    .price-old {
-      font-size: 1.1rem;
-    }
-
-    .section-title {
-      color: #4c1d95;
-      border-bottom: 2px solid #8b5cf6;
-      display: inline-block;
-      padding-bottom: 5px;
-      font-size: 1rem;
-    }
-
-    .description-text {
-      line-height: 1.7;
-      font-size: 0.95rem;
-    }
-
-    .btn-purple {
-      background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      transition: all 0.3s ease;
-      letter-spacing: 0.5px;
-      font-size: 0.95rem;
-    }
-
-    .btn-purple:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 15px rgba(124, 58, 237, 0.4);
-      color: white;
-    }
-
-    .btn-outline-purple {
-      background: transparent;
-      color: #7c3aed;
-      border: 2px solid #8b5cf6;
-      border-radius: 10px;
-      transition: all 0.3s ease;
-      letter-spacing: 0.5px;
-      font-size: 0.95rem;
-    }
-
-    .btn-outline-purple:hover {
-      background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-      color: white;
-      border-color: transparent;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 15px rgba(124, 58, 237, 0.3);
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .image-container {
-        min-height: 250px;
-      }
-
-      .product-image {
-        min-height: 250px;
-      }
-
-      .product-title {
-        font-size: 1.3rem;
-      }
-
-      .price-current {
-        font-size: 1.5rem;
-      }
-    }
-
-    /* Animation on load */
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .card {
-      animation: fadeInUp 0.6s ease;
-    }
+    body { background-color: #f9f8ff; font-family: 'Poppins', sans-serif; }
+    .text-gradient { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .card { background: white; transition: transform 0.3s ease; animation: fadeInUp 0.6s ease; }
+    .image-container { position: relative; background: #f3f4f6; height: 100%; min-height: 350px; }
+    .product-image { height: 100%; min-height: 350px; object-fit: cover; transition: transform 0.4s ease; }
+    .product-image:hover { transform: scale(1.05); }
+    .discount-badge { position: absolute; top: 15px; right: 15px;
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; padding: 8px 16px;
+      border-radius: 50px; font-weight: 700; font-size: 1rem; box-shadow: 0 4px 15px rgba(239,68,68,0.4);
+      animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.05);} }
+    .product-title { color: #4c1d95; font-size: 1.6rem; }
+    .category-badge { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+      color: white; font-size: 0.9rem; font-weight: 600; border-radius: 50px; letter-spacing: 0.5px; }
+    .price-section { background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border: 2px solid #86efac; }
+    .price-current { font-size: 1.8rem; color: #16a34a; }
+    .price-old { font-size: 1.1rem; }
+    .section-title { color: #4c1d95; border-bottom: 2px solid #8b5cf6; display: inline-block; padding-bottom:5px; font-size:1rem; }
+    .description-text { line-height: 1.7; font-size:0.95rem; }
+    .btn-purple { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color:white; border:none; border-radius:10px; transition:all 0.3s ease; font-size:0.95rem; }
+    .btn-purple:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(124,58,237,0.4); color:white; }
+    .btn-outline-purple { background:transparent; color:#7c3aed; border:2px solid #8b5cf6; border-radius:10px; transition:all 0.3s ease; font-size:0.95rem; }
+    .btn-outline-purple:hover { background: linear-gradient(135deg,#8b5cf6 0%,#7c3aed 100%); color:white; border-color:transparent; transform:translateY(-2px); box-shadow:0 6px 15px rgba(124,58,237,0.3);}
+    @media (max-width:768px){ .image-container{min-height:250px;} .product-image{min-height:250px;} .product-title{font-size:1.3rem;} .price-current{font-size:1.5rem;} }
+    @keyframes fadeInUp { from{opacity:0;transform:translateY(30px);} to{opacity:1;transform:translateY(0);} }
   </style>
 </section>
 </html>

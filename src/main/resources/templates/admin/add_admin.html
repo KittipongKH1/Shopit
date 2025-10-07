@@ -1,151 +1,104 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{base::layout(~{::section})}">
+	th:replace="~{base::layout(~{::section})}">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<section>
+		<div class="container mt-5 p-5">
+			<div class="row">
 
-<section th:fragment="section">
-  <div class="container mt-5 py-5">
-    <div class="row justify-content-center">
-      <div class="col-md-8">
-        <div class="card border-0 shadow-lg p-4 rounded-4">
-          <div class="card-header text-center bg-white border-0">
-            <h3 class="fw-bold mb-3 text-gradient">Add Admin</h3>
+				<div class="col-md-7 p-2 offset-md-2">
+					<div class="card shadow p-3 mb-5 bg-body-tertiary rounded">
+						<div class="card-header text-center">
+							<p class="fs-4 text-center">Add Admin</p>
+							<th:block th:if="${session.succMsg}">
+								<p class="text-success fw-bold">[[${session.succMsg}]]</p>
+								<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+							</th:block>
 
-            <!-- Success Message -->
-            <th:block th:if="${session.succMsg}">
-              <p class="text-success fw-semibold">[[${session.succMsg}]]</p>
-              <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
-            </th:block>
+							<th:block th:if="${session.errorMsg}">
+								<p class="text-danger fw-bold">[[${session.errorMsg}]]</p>
+								<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+							</th:block>
+						</div>
+						<div class="card-body">
+							<form action="/admin/save-admin" enctype="multipart/form-data"
+								method="post">
+								<div class="row">
+									<div class="col">
+										<label class="form-label">Full Name</label> <input required
+											class="form-control" name="name" type="text">
+									</div>
 
-            <!-- Error Message -->
-            <th:block th:if="${session.errorMsg}">
-              <p class="text-danger fw-semibold">[[${session.errorMsg}]]</p>
-              <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
-            </th:block>
-          </div>
+									<div class="col">
+										<label class="form-label">Mobile Number</label> <input
+											required class="form-control" name="mobileNumber"
+											type="number">
+									</div>
 
-          <div class="card-body">
-            <form action="/admin/save-admin" enctype="multipart/form-data" method="post" class="needs-validation" novalidate>
-              
-              <!-- Full Name + Mobile -->
-              <div class="row mb-3">
-                <div class="col">
-                  <label class="form-label fw-semibold">Full Name</label>
-                  <input required class="form-control form-control-lg" name="name" type="text" placeholder="John Doe">
-                </div>
-                <div class="col">
-                  <label class="form-label fw-semibold">Mobile Number</label>
-                  <input required class="form-control form-control-lg" name="mobileNumber" type="number" placeholder="0812345678">
-                </div>
-              </div>
+								</div>
 
-              <!-- Email -->
-              <div class="mb-3">
-                <label class="form-label fw-semibold">Email</label>
-                <input required class="form-control form-control-lg" name="email" type="email" placeholder="admin@example.com">
-              </div>
+								<div class="mb-3">
+									<label class="form-label">Email</label> <input required
+										class="form-control" name="email" type="email">
+								</div>
 
-              <!-- Address + City -->
-              <div class="row mb-3">
-                <div class="col">
-                  <label class="form-label fw-semibold">Address</label>
-                  <input required class="form-control form-control-lg" name="address" type="text" placeholder="123 Main St.">
-                </div>
-                <div class="col">
-                  <label class="form-label fw-semibold">City</label>
-                  <input required class="form-control form-control-lg" name="city" type="text" placeholder="Bangkok">
-                </div>
-              </div>
 
-              <!-- State + Pincode -->
-              <div class="row mb-3">
-                <div class="col">
-                  <label class="form-label fw-semibold">State</label>
-                  <input required class="form-control form-control-lg" name="state" type="text" placeholder="Central">
-                </div>
-                <div class="col">
-                  <label class="form-label fw-semibold">Pincode</label>
-                  <input required class="form-control form-control-lg" name="pincode" type="number" placeholder="10200">
-                </div>
-              </div>
+								<div class="row">
+									<div class="col">
+										<label class="form-label">Address</label> <input required
+											class="form-control" name="address" type="text">
+									</div>
 
-              <!-- Password -->
-              <div class="row mb-3">
-                <div class="col">
-                  <label class="form-label fw-semibold">Password</label>
-                  <input required class="form-control form-control-lg" name="password" type="password" placeholder="••••••••">
-                </div>
-                <div class="col">
-                  <label class="form-label fw-semibold">Confirm Password</label>
-                  <input required class="form-control form-control-lg" name="cpassword" type="password" placeholder="••••••••">
-                </div>
-              </div>
+									<div class="col">
+										<label class="form-label">City</label> <input required
+											class="form-control" name="city" type="text">
+									</div>
 
-              <!-- Profile Image -->
-              <div class="mb-4">
-                <label class="form-label fw-semibold">Profile Image</label>
-                <input class="form-control form-control-lg" name="img" type="file" accept="image/*">
-              </div>
+								</div>
 
-              <!-- ปุ่ม Register -->
-              <button type="submit" class="btn btn-purple w-100 py-3 fw-bold fs-5">
-                <i class="fa-solid fa-user-plus me-2"></i> Register Admin
-              </button>
+								<div class="row">
+									<div class="col">
+										<label class="form-label">State</label> <input required
+											class="form-control" name="state" type="text">
+									</div>
 
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+									<div class="col">
+										<label class="form-label">Pincode</label> <input required
+											class="form-control" name="pincode" type="number">
+									</div>
 
-  <!-- สไตล์หลัก -->
-  <style>
-    body {
-      background-color: #f9f8ff;
-      font-family: 'Poppins', sans-serif;
-    }
+								</div>
 
-    /* Gradient สีม่วงหลัก */
-    .text-gradient {
-      background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+								<div class="row">
+									<div class="col">
+										<label class="form-label">Password</label> <input required
+											class="form-control" name="password" type="password">
+									</div>
+									<div class="col">
+										<label class="form-label">Confirm Password</label> <input
+											required class="form-control" name="cpassword"
+											type="password">
+									</div>
+								</div>
+								<div class="mb-3">
+									<label class="form-label">Profile Image</label> <input
+										class="form-control" name="img" type="file">
+								</div>
+								<button type="submit"
+									class="btn bg-primary text-white col-md-12">Register</button>
+							</form>
+						</div>
 
-    /* ปุ่ม Register สีม่วง */
-    .btn-purple {
-      background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-      color: white;
-      border: none;
-      border-radius: 12px;
-      transition: all 0.3s ease;
-    }
 
-    .btn-purple:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 15px rgba(124, 58, 237, 0.4);
-    }
+					</div>
+				</div>
+			</div>
+		</div>
 
-    /* ฟอร์มและการ์ด */
-    .form-control {
-      border-radius: 10px;
-      border: 1px solid #e0e0e0;
-      padding: 0.75rem 1rem;
-      font-size: 1rem;
-    }
-
-    .form-control:focus {
-      border-color: #8b5cf6;
-      box-shadow: 0 0 0 0.2rem rgba(139, 92, 246, 0.25);
-    }
-
-    .card {
-      background: white;
-    }
-
-    label.form-label {
-      color: #4c1d95;
-    }
-  </style>
-</section>
+	</section>
+</body>
 </html>

@@ -178,4 +178,15 @@ public class UserServiceImpl implements UserService {
 		return userRepository.existsByEmail(email);
 	}
 
+	@Override
+    public List<UserDtls> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+	@Override
+	public UserDtls getUserById(Integer id) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'getUserById'");
+	}
+
 }

@@ -1,169 +1,92 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{base::layout(~{::section})}">
+	th:replace="~{base::layout(~{::section})}">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<section>
+		<div class="container p-5 mt-3">
+			<div class="row">
+				<div class="col-md-6 offset-md-3">
+					<div class="card card-sh">
+						<div class="card-header text-center ">
+							<p class="fs-4">Add Product</p>
 
-<section th:fragment="section">
-  <div class="container mt-5 py-5">
-    <div class="row justify-content-center">
-      <div class="col-md-8">
-        <div class="card border-0 shadow-lg p-4 rounded-4">
-          <div class="card-header text-center bg-white border-0">
-            <h3 class="fw-bold mb-3 text-gradient">Add Product</h3>
+							<th:block th:if="${session.succMsg}">
+								<p class="text-success fw-bold">[[${session.succMsg}]]</p>
+								<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+							</th:block>
 
-            <!-- Success Message -->
-            <th:block th:if="${session.succMsg}">
-              <div class="alert alert-success text-center fw-semibold" role="alert">
-                [[${session.succMsg}]]
-              </div>
-              <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
-            </th:block>
+							<th:block th:if="${session.errorMsg}">
+								<p class="text-danger fw-bold">[[${session.errorMsg}]]</p>
+								<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+							</th:block>
 
-            <!-- Error Message -->
-            <th:block th:if="${session.errorMsg}">
-              <div class="alert alert-danger text-center fw-semibold" role="alert">
-                [[${session.errorMsg}]]
-              </div>
-              <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
-            </th:block>
-          </div>
+						</div>
+						<div class="card-body">
+							<form action="/admin/saveProduct" method="post"
+								enctype="multipart/form-data">
+								<div class="mb-3">
+									<label>Enter Title</label> <input type="text" name="title"
+										class="form-control">
+								</div>
 
-          <div class="card-body">
-            <form action="/admin/saveProduct" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
-              
-              <!-- Title -->
-              <div class="mb-3">
-                <label class="form-label fw-semibold">Title</label>
-                <input type="text" name="title" class="form-control form-control-lg" placeholder="Enter product title" required>
-              </div>
+								<div class="mb-3">
+									<label>Enter Description</label>
+									<textarea rows="3" cols="" class="form-control"
+										name="description"></textarea>
+								</div>
 
-              <!-- Description -->
-              <div class="mb-3">
-                <label class="form-label fw-semibold">Description</label>
-                <textarea rows="3" class="form-control form-control-lg" name="description" placeholder="Enter product description" required></textarea>
-              </div>
+								<div class="mb-3">
+									<label>Category</label> <select class="form-control"
+										name="category">
+										<option>--select--</option>
+										<option th:each="c:${categories}">[[${c.name}]]</option>
+									</select>
+								</div>
 
-              <!-- Category -->
-              <div class="mb-3">
-                <label class="form-label fw-semibold">Category</label>
-                <select class="form-control form-control-lg" name="category" required>
-                  <option value="">--select--</option>
-                  <option th:each="c:${categories}" th:value="${c.id}">[[${c.name}]]</option>
-                </select>
-              </div>
+								<div class="mb-3">
+									<label>Enter Price</label> <input type="number" name="price"
+										class="form-control">
+								</div>
+								<div class="mb-3">
+									<label>Status</label>
 
-              <!-- Price -->
-              <div class="mb-3">
-                <label class="form-label fw-semibold">Price</label>
-                <input type="number" name="price" class="form-control form-control-lg" placeholder="Enter price" step="0.01" required>
-              </div>
+									<div class="form-check">
+										<input class="form-check-input" type="radio" checked
+											value="true" name="isActive" id="flexRadioDefault1">
+										<label class="form-check-label" for="flexRadioDefault1">
+											Active </label>
+									</div>
+									<div class="form-check">
+										<input class="form-check-input" type="radio" name="isActive"
+											value="false" id="flexRadioDefault2"> <label
+											class="form-check-label" for="flexRadioDefault2">
+											Inactive </label>
+									</div>
 
-              <!-- Status -->
-              <div class="mb-3">
-                <label class="form-label fw-semibold">Status</label>
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" value="true" name="isActive" id="statusActive" checked>
-                  <label class="form-check-label" for="statusActive">Active</label>
-                </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" value="false" name="isActive" id="statusInactive">
-                  <label class="form-check-label" for="statusInactive">Inactive</label>
-                </div>
-              </div>
+								</div>
+								<div class="row">
 
-              <!-- Stock + Image -->
-              <div class="row">
-                <div class="mb-3 col">
-                  <label class="form-label fw-semibold">Stock</label>
-                  <input type="number" name="stock" class="form-control form-control-lg" placeholder="Enter stock quantity" required>
-                </div>
-                <div class="mb-3 col">
-                  <label class="form-label fw-semibold">Upload Image</label>
-                  <input type="file" name="file" class="form-control form-control-lg" accept="image/*" required>
-                </div>
-              </div>
+									<div class="mb-3 col">
+										<label>Enter Stock</label> <input type="text" name="stock"
+											class="form-control">
+									</div>
 
-              <!-- Submit Button -->
-              <button type="submit" class="btn btn-purple w-100 py-3 fw-bold fs-5">
-                <i class="fa-solid fa-plus me-2"></i> Add Product
-              </button>
-
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Styles -->
-  <style>
-    body {
-      background-color: #f9f8ff;
-      font-family: 'Poppins', sans-serif;
-    }
-
-    .text-gradient {
-      background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .btn-purple {
-      background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-      color: white;
-      border: none;
-      border-radius: 12px;
-      font-weight: 600;
-      transition: all 0.3s ease;
-    }
-
-    .btn-purple:hover {
-      transform: translateY(-2px) scale(1.02);
-      box-shadow: 0 6px 15px rgba(124, 58, 237, 0.35);
-    }
-
-    .form-control {
-      border-radius: 10px;
-      border: 1px solid #e0e0e0;
-      padding: 0.75rem 1rem;
-      font-size: 1rem;
-    }
-
-    .form-control:focus {
-      border-color: #8b5cf6;
-      box-shadow: 0 0 0 0.2rem rgba(139, 92, 246, 0.25);
-    }
-
-    label.form-label {
-      color: #4c1d95;
-      font-weight: 600;
-    }
-
-    .card {
-      background: white;
-      border-radius: 1rem;
-    }
-
-    .alert {
-      border-radius: 12px;
-      font-size: 0.95rem;
-    }
-  </style>
-
-  <!-- Bootstrap 5 validation -->
-  <script>
-    (function () {
-      'use strict'
-      var forms = document.querySelectorAll('.needs-validation')
-      Array.prototype.slice.call(forms).forEach(function (form) {
-        form.addEventListener('submit', function (event) {
-          if (!form.checkValidity()) {
-            event.preventDefault()
-            event.stopPropagation()
-          }
-          form.classList.add('was-validated')
-        }, false)
-      })
-    })()
-  </script>
-</section>
+									<div class="mb-3 col">
+										<label>Upload Image</label> <input type="file" name="file"
+											class="form-control">
+									</div>
+								</div>
+								<button class="btn btn-primary col-md-12">Submit</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</body>
 </html>
